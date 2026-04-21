@@ -1,20 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useStore } from "@/store/store";
 import { ProductCard } from "@/components/ProductCard";
 import { categories } from "@/data/products";
 
-export const Route = createFileRoute("/loja")({
-  head: () => ({
-    meta: [
-      { title: "Loja — Marketplace Senhor do Bonfim" },
-      { name: "description", content: "Catálogo completo de produtos personalizados da Igreja do Senhor do Bonfim." },
-    ],
-  }),
-  component: Loja,
-});
-
-function Loja() {
+export default function Loja() {
   const { products } = useStore();
   const [cat, setCat] = useState<string>("Todos");
   const [q, setQ] = useState("");

@@ -1,16 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
-
-export const Route = createFileRoute("/sobre")({
-  head: () => ({
-    meta: [
-      { title: "Sobre — Marketplace Senhor do Bonfim" },
-      { name: "description", content: "A história e missão do Marketplace da Igreja do Senhor do Bonfim." },
-    ],
-  }),
-  component: Sobre,
-});
-
-function Sobre() {
+export default function Sobre() {
   return (
     <main className="mx-auto max-w-3xl px-4 py-16">
       <div className="text-xs uppercase tracking-[0.2em] text-gold">Nossa história</div>

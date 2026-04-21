@@ -1,16 +1,11 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useStore } from "@/store/store";
 import { formatBRL } from "@/data/products";
 import { Truck, Store, CreditCard, QrCode, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/checkout")({
-  head: () => ({ meta: [{ title: "Checkout — Senhor do Bonfim" }] }),
-  component: Checkout,
-});
-
-function Checkout() {
+export default function Checkout() {
   const { cart, cartTotal, clearCart, addOrder } = useStore();
   const navigate = useNavigate();
   const [delivery, setDelivery] = useState<"entrega" | "retirada">("entrega");
@@ -39,12 +34,11 @@ function Checkout() {
       return;
     }
     setProcessing(true);
-    // Simulate gateway call
     setTimeout(() => {
       const order = addOrder({ customer: name, items: cart, total, delivery, payment, status: "pago" });
       clearCart();
       toast.success("Pagamento aprovado!", { description: `Pedido ${order.id} criado.` });
-      navigate({ to: "/pedido-confirmado", search: { id: order.id } });
+      navigate(`/pedido-confirmado?id=${order.id}`);
     }, 1400);
   };
 

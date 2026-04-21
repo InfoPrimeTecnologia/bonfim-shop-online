@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, NavLink } from "react-router-dom";
 import { ShoppingBag, LayoutDashboard } from "lucide-react";
 import { useStore } from "@/store/store";
 
@@ -18,12 +18,10 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-7 text-sm md:flex">
-          <Link to="/" activeOptions={{ exact: true }} className="text-foreground/80 hover:text-foreground" activeProps={{ className: "text-foreground font-medium" }}>Início</Link>
-          <Link to="/loja" className="text-foreground/80 hover:text-foreground" activeProps={{ className: "text-foreground font-medium" }}>Loja</Link>
-          <Link to="/sobre" className="text-foreground/80 hover:text-foreground" activeProps={{ className: "text-foreground font-medium" }}>Sobre</Link>
-          <Link to="/admin" className="text-foreground/80 hover:text-foreground inline-flex items-center gap-1.5" activeProps={{ className: "text-foreground font-medium" }}>
-            <LayoutDashboard className="h-4 w-4" /> Admin
-          </Link>
+          <NavItem to="/" end>Início</NavItem>
+          <NavItem to="/loja">Loja</NavItem>
+          <NavItem to="/sobre">Sobre</NavItem>
+          <NavItem to="/admin"><LayoutDashboard className="h-4 w-4" /> Admin</NavItem>
         </nav>
 
         <Link
@@ -40,6 +38,20 @@ export function SiteHeader() {
         </Link>
       </div>
     </header>
+  );
+}
+
+function NavItem({ to, end, children }: { to: string; end?: boolean; children: React.ReactNode }) {
+  return (
+    <NavLink
+      to={to}
+      end={end}
+      className={({ isActive }) =>
+        `inline-flex items-center gap-1.5 ${isActive ? "text-foreground font-medium" : "text-foreground/80 hover:text-foreground"}`
+      }
+    >
+      {children}
+    </NavLink>
   );
 }
 

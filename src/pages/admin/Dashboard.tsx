@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useStore } from "@/store/store";
 import { formatBRL } from "@/data/products";
 import { TrendingUp, ShoppingBag, Package, DollarSign } from "lucide-react";
@@ -7,17 +6,12 @@ import {
   PieChart, Pie, Cell, Legend,
 } from "recharts";
 
-export const Route = createFileRoute("/admin/")({
-  component: Dashboard,
-});
-
-function Dashboard() {
+export default function Dashboard() {
   const { orders, products } = useStore();
   const revenue = orders.reduce((s, o) => s + o.total, 0);
   const itemsSold = orders.reduce((s, o) => s + o.items.reduce((a, i) => a + i.qty, 0), 0);
   const avgTicket = orders.length ? revenue / orders.length : 0;
 
-  // Sales by day (last 7 days)
   const series = Array.from({ length: 7 }, (_, i) => {
     const d = new Date();
     d.setDate(d.getDate() - (6 - i));
@@ -28,7 +22,6 @@ function Dashboard() {
     return { day: d.toLocaleDateString("pt-BR", { weekday: "short" }), total };
   });
 
-  // Sales by category
   const byCat: Record<string, number> = {};
   orders.forEach((o) => o.items.forEach((i) => {
     byCat[i.product.category] = (byCat[i.product.category] || 0) + i.qty * i.product.price;
@@ -36,7 +29,6 @@ function Dashboard() {
   const pieData = Object.entries(byCat).map(([name, value]) => ({ name, value }));
   const colors = ["oklch(0.78 0.13 85)", "oklch(0.28 0.05 260)", "oklch(0.65 0.12 200)", "oklch(0.7 0.15 50)", "oklch(0.55 0.18 30)", "oklch(0.45 0.08 260)"];
 
-  // Delivery split
   const entrega = orders.filter((o) => o.delivery === "entrega").length;
   const retirada = orders.filter((o) => o.delivery === "retirada").length;
 

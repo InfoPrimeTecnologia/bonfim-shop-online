@@ -1,19 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link, useSearchParams } from "react-router-dom";
 import { useStore } from "@/store/store";
 import { formatBRL } from "@/data/products";
 import { CheckCircle2 } from "lucide-react";
-import { z } from "zod";
 
-const search = z.object({ id: z.string().optional() });
-
-export const Route = createFileRoute("/pedido-confirmado")({
-  validateSearch: search,
-  head: () => ({ meta: [{ title: "Pedido confirmado" }] }),
-  component: Confirmado,
-});
-
-function Confirmado() {
-  const { id } = Route.useSearch();
+export default function PedidoConfirmado() {
+  const [params] = useSearchParams();
+  const id = params.get("id") ?? undefined;
   const { orders } = useStore();
   const order = orders.find((o) => o.id === id);
 

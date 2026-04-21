@@ -1,12 +1,7 @@
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { LayoutDashboard, Package, ShoppingCart, ArrowLeft } from "lucide-react";
 
-export const Route = createFileRoute("/admin")({
-  head: () => ({ meta: [{ title: "Painel Admin — Senhor do Bonfim" }] }),
-  component: AdminLayout,
-});
-
-function AdminLayout() {
+export default function AdminLayout() {
   return (
     <div className="min-h-screen bg-muted/30">
       <aside className="fixed inset-y-0 left-0 hidden w-60 flex-col border-r border-border bg-card p-5 md:flex">
@@ -19,7 +14,7 @@ function AdminLayout() {
         </Link>
 
         <nav className="space-y-1 text-sm">
-          <NavItem to="/admin" icon={<LayoutDashboard className="h-4 w-4" />} label="Dashboard" exact />
+          <NavItem to="/admin" icon={<LayoutDashboard className="h-4 w-4" />} label="Dashboard" end />
           <NavItem to="/admin/produtos" icon={<Package className="h-4 w-4" />} label="Produtos" />
           <NavItem to="/admin/pedidos" icon={<ShoppingCart className="h-4 w-4" />} label="Pedidos" />
         </nav>
@@ -46,15 +41,16 @@ function AdminLayout() {
   );
 }
 
-function NavItem({ to, icon, label, exact }: { to: string; icon: React.ReactNode; label: string; exact?: boolean }) {
+function NavItem({ to, icon, label, end }: { to: string; icon: React.ReactNode; label: string; end?: boolean }) {
   return (
-    <Link
-      to={to as any}
-      activeOptions={{ exact }}
-      className="flex items-center gap-2 rounded-md px-3 py-2 text-foreground/80 hover:bg-muted hover:text-foreground"
-      activeProps={{ className: "bg-muted text-foreground font-medium" }}
+    <NavLink
+      to={to}
+      end={end}
+      className={({ isActive }) =>
+        `flex items-center gap-2 rounded-md px-3 py-2 ${isActive ? "bg-muted text-foreground font-medium" : "text-foreground/80 hover:bg-muted hover:text-foreground"}`
+      }
     >
       {icon} {label}
-    </Link>
+    </NavLink>
   );
 }

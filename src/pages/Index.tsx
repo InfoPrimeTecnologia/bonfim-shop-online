@@ -1,26 +1,15 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { useStore } from "@/store/store";
 import { ProductCard } from "@/components/ProductCard";
 import hero from "@/assets/hero-products.jpg";
 import { ArrowRight, Truck, Store, ShieldCheck } from "lucide-react";
 
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Marketplace Oficial — Igreja do Senhor do Bonfim" },
-      { name: "description", content: "Produtos personalizados da Igreja do Senhor do Bonfim: camisetas, canecas, relógios, acessórios e mais." },
-    ],
-  }),
-  component: Index,
-});
-
-function Index() {
+export default function Index() {
   const { products } = useStore();
   const featured = products.filter((p) => p.featured);
 
   return (
     <main>
-      {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 md:grid-cols-2 md:items-center md:py-24">
           <div>
@@ -49,7 +38,6 @@ function Index() {
         </div>
       </section>
 
-      {/* benefits */}
       <section className="border-y border-border bg-card">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 py-8 sm:grid-cols-3">
           {[
@@ -70,7 +58,6 @@ function Index() {
         </div>
       </section>
 
-      {/* featured */}
       <section className="mx-auto max-w-7xl px-4 py-16">
         <div className="mb-8 flex items-end justify-between">
           <div>
@@ -84,7 +71,6 @@ function Index() {
         </div>
       </section>
 
-      {/* CTA banner */}
       <section className="mx-auto max-w-7xl px-4 pb-16">
         <div className="overflow-hidden rounded-2xl gradient-deep p-10 text-deep-foreground md:p-14">
           <div className="max-w-2xl">

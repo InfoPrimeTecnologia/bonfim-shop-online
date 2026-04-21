@@ -1,13 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useStore } from "@/store/store";
 import { formatBRL } from "@/data/products";
 
-export const Route = createFileRoute("/admin/pedidos")({
-  component: AdminPedidos,
-});
-
-function AdminPedidos() {
+export default function AdminPedidos() {
   const { orders } = useStore();
   const [filter, setFilter] = useState<"todos" | "pago" | "pendente" | "enviado">("todos");
 

@@ -1,22 +1,12 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useStore } from "@/store/store";
 import { formatBRL } from "@/data/products";
 import { Minus, Plus, ShoppingBag, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/produto/$id")({
-  component: ProdutoPage,
-  notFoundComponent: () => (
-    <main className="mx-auto max-w-3xl px-4 py-20 text-center">
-      <h1 className="font-serif text-3xl">Produto não encontrado</h1>
-      <Link to="/loja" className="mt-4 inline-block text-gold">Voltar para a loja</Link>
-    </main>
-  ),
-});
-
-function ProdutoPage() {
-  const { id } = Route.useParams();
+export default function Produto() {
+  const { id } = useParams<{ id: string }>();
   const { products, addToCart } = useStore();
   const navigate = useNavigate();
   const product = products.find((p) => p.id === id);
@@ -89,7 +79,7 @@ function ProdutoPage() {
               <ShoppingBag className="h-4 w-4" /> Adicionar ao carrinho
             </button>
             <button
-              onClick={() => { handleAdd(); navigate({ to: "/checkout" }); }}
+              onClick={() => { handleAdd(); navigate("/checkout"); }}
               className="inline-flex items-center gap-2 rounded-full gradient-gold px-6 py-3 text-sm font-medium text-deep"
             >
               Comprar agora

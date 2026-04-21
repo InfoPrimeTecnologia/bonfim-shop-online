@@ -1,26 +1,21 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useStore } from "@/store/store";
 import { categories, formatBRL, type Category, type Product } from "@/data/products";
 import { Pencil, Trash2, Plus, X } from "lucide-react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/admin/produtos")({
-  component: AdminProdutos,
-});
-
 const blank: Omit<Product, "id"> = {
   name: "", description: "", price: 0, category: "Camisetas", image: "", stock: 0, sizes: [],
 };
 
-function AdminProdutos() {
+export default function AdminProdutos() {
   const { products, addProduct, updateProduct, removeProduct } = useStore();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Product | null>(null);
   const [form, setForm] = useState<Omit<Product, "id">>(blank);
 
   const openNew = () => { setEditing(null); setForm(blank); setOpen(true); };
-  const openEdit = (p: Product) => { setEditing(p); const { id, ...rest } = p; setForm(rest); setOpen(true); };
+  const openEdit = (p: Product) => { setEditing(p); const { id: _id, ...rest } = p; setForm(rest); setOpen(true); };
 
   const save = () => {
     if (!form.name || form.price <= 0) { toast.error("Preencha nome e preço"); return; }

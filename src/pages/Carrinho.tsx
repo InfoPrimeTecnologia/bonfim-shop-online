@@ -1,14 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { useStore } from "@/store/store";
 import { formatBRL } from "@/data/products";
 import { Trash2, Minus, Plus } from "lucide-react";
 
-export const Route = createFileRoute("/carrinho")({
-  head: () => ({ meta: [{ title: "Carrinho — Senhor do Bonfim" }] }),
-  component: Carrinho,
-});
-
-function Carrinho() {
+export default function Carrinho() {
   const { cart, updateQty, removeFromCart, cartTotal } = useStore();
 
   return (

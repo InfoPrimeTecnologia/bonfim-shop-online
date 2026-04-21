@@ -1,11 +1,10 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { formatBRL, type Product } from "@/data/products";
 
 export function ProductCard({ product }: { product: Product }) {
   return (
     <Link
-      to="/produto/$id"
-      params={{ id: product.id }}
+      to={`/produto/${product.id}`}
       className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition hover:-translate-y-0.5 hover:border-gold hover:shadow-elegant"
     >
       <div className="aspect-square overflow-hidden bg-muted">
