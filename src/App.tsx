@@ -1,7 +1,5 @@
-import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
-import { StoreProvider } from "@/store/store";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
-import { Toaster } from "@/components/ui/sonner";
 
 import Index from "@/pages/Index";
 import Loja from "@/pages/Loja";
@@ -38,17 +36,14 @@ function Shell() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       {!isAdmin && <SiteFooter />}
-      <Toaster />
     </>
   );
 }
 
 export default function App() {
   return (
-    <StoreProvider>
-      <BrowserRouter>
-        <Shell />
-      </BrowserRouter>
-    </StoreProvider>
+    <BrowserRouter>
+      <Shell />
+    </BrowserRouter>
   );
 }
