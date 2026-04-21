@@ -69,7 +69,7 @@ function Dashboard() {
                 <CartesianGrid stroke="oklch(0.9 0.012 80)" vertical={false} />
                 <XAxis dataKey="day" stroke="oklch(0.5 0.02 260)" fontSize={12} />
                 <YAxis stroke="oklch(0.5 0.02 260)" fontSize={12} />
-                <Tooltip formatter={(v: number) => formatBRL(v)} contentStyle={{ borderRadius: 8, border: "1px solid oklch(0.9 0.012 80)" }} />
+                <Tooltip formatter={(v) => formatBRL(Number(v))} contentStyle={{ borderRadius: 8, border: "1px solid oklch(0.9 0.012 80)" }} />
                 <Area type="monotone" dataKey="total" stroke="oklch(0.78 0.13 85)" fill="url(#g)" strokeWidth={2} />
               </AreaChart>
             </ResponsiveContainer>
@@ -84,7 +84,7 @@ function Dashboard() {
                 <Pie data={pieData} dataKey="value" nameKey="name" innerRadius={50} outerRadius={90} paddingAngle={2}>
                   {pieData.map((_, i) => <Cell key={i} fill={colors[i % colors.length]} />)}
                 </Pie>
-                <Tooltip formatter={(v: number) => formatBRL(v)} />
+                <Tooltip formatter={(v) => formatBRL(Number(v))} />
                 <Legend wrapperStyle={{ fontSize: 11 }} />
               </PieChart>
             </ResponsiveContainer>
