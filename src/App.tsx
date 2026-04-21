@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { StoreProvider } from "@/store/store";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
+import { Toaster } from "@/components/ui/sonner";
 
 import Index from "@/pages/Index";
 import Loja from "@/pages/Loja";
@@ -42,8 +44,11 @@ function Shell() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Shell />
-    </BrowserRouter>
+    <StoreProvider>
+      <BrowserRouter>
+        <Shell />
+      </BrowserRouter>
+      <Toaster />
+    </StoreProvider>
   );
 }
