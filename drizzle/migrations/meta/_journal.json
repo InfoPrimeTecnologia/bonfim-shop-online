@@ -8,6 +8,13 @@
       "when": 1790002699010,
       "tag": "0000_secure_customer_accounts_and_orders",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790002987501,
+      "tag": "0001_harden_admin_role_check",
+      "breakpoints": true
     }
   ]
 }
