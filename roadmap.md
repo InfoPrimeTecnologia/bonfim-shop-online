@@ -2,7 +2,7 @@
 
 - [x] Confirmar reivindicação e funcionamento da conexão Shopify
 - [x] Cadastrar os dois produtos com fotos, preço e grade PP–XGG
-- [x] Configurar login por e-mail e Google
+- [x] Configurar login e cadastro somente por e-mail e senha
 - [x] Restringir compras a clientes autenticados
 - [x] Criar área do cliente com histórico e status dos pedidos
 - [x] Restringir painel administrativo por função segura

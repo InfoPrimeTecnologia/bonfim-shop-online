@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
-import { lovable } from "@/integrations/lovable";
 import { supabase } from "@/integrations/supabase/client";
 
 function safeNext(value: string | null) {
@@ -52,12 +51,6 @@ export default function Entrar() {
     } finally { setBusy(false); }
   };
 
-  const google = async () => {
-    localStorage.setItem("bonfim-auth-next", next);
-    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-    if (result.error) toast.error("Não foi possível entrar com Google.");
-  };
-
   const forgot = async () => {
     if (!email) return toast.error("Informe seu e-mail primeiro.");
     const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/redefinir-senha` });
@@ -77,8 +70,6 @@ export default function Entrar() {
           <Button type="submit" disabled={busy} className="w-full">{busy && <Loader2 className="animate-spin" />}{mode === "login" ? "Entrar" : "Criar conta"}</Button>
         </form>
         {mode === "login" && <button type="button" onClick={forgot} className="mt-3 w-full text-center text-sm text-muted-foreground hover:text-foreground">Esqueci minha senha</button>}
-        <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground"><span className="h-px flex-1 bg-border" />ou<span className="h-px flex-1 bg-border" /></div>
-        <Button type="button" variant="outline" onClick={google} className="w-full">Continuar com Google</Button>
         <button type="button" onClick={() => setMode(mode === "login" ? "cadastro" : "login")} className="mt-5 w-full text-center text-sm text-gold">
           {mode === "login" ? "Ainda não tenho conta" : "Já tenho uma conta"}
         </button>
