@@ -41,7 +41,6 @@ export default function Checkout() {
             ))}
           </div>
           <div className="my-4 border-t border-border" />
-          <div className="flex justify-between text-sm"><span className="text-muted-foreground">Subtotal</span><span>{formatBRL(cartTotal)}</span></div>
           <div className="mt-1 flex justify-between text-sm"><span className="text-muted-foreground">Frete</span><span>Calculado no checkout</span></div>
           <div className="my-3 border-t border-border" />
           <div className="flex justify-between text-lg font-semibold"><span>Subtotal</span><span>{formatMoney(total, currency)}</span></div>
