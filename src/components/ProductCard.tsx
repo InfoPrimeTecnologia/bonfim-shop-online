@@ -1,30 +1,36 @@
 import { Link } from "react-router-dom";
-import { formatBRL, type Product } from "@/data/products";
+import { ShoppingBag } from "lucide-react";
+import { toast } from "sonner";
+import { formatMoney, type ShopifyProduct } from "@/lib/shopify";
+import { useCartStore } from "@/store/shopifyCart";
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({ product }: { product: ShopifyProduct }) {
+  const addItem = useCartStore((state) => state.addItem);
+  const isLoading = useCartStore((state) => state.isLoading);
+  const item = product.node;
+  const variant = item.variants.edges.find(({ node }) => node.availableForSale)?.node;
+  const image = item.images.edges[0]?.node;
+
+  const add = async () => {
+    if (!variant) return;
+    try {
+      await addItem(product, variant);
+      toast.success("Adicionado ao carrinho", { description: item.title });
+    } catch { toast.error("Não foi possível adicionar o produto."); }
+  };
   return (
-    <Link
-      to={`/produto/${product.id}`}
-      className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition hover:-translate-y-0.5 hover:border-gold hover:shadow-elegant"
-    >
-      <div className="aspect-square overflow-hidden bg-muted">
-        <img
-          src={product.image}
-          alt={product.name}
-          loading="lazy"
-          width={900}
-          height={900}
-          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-        />
-      </div>
+    <article className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition hover:-translate-y-0.5 hover:border-gold hover:shadow-elegant">
+      <Link to={`/produto/${item.handle}`} className="aspect-square overflow-hidden bg-muted">
+        {image ? <img src={image.url} alt={image.altText ?? item.title} loading="lazy" width={900} height={900} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" /> : <div className="flex h-full items-center justify-center text-sm text-muted-foreground">Sem imagem</div>}
+      </Link>
       <div className="flex flex-1 flex-col gap-2 p-4">
-        <div className="text-[11px] uppercase tracking-wider text-gold">{product.category}</div>
-        <div className="font-serif text-lg leading-tight">{product.name}</div>
-        <div className="mt-auto flex items-end justify-between pt-2">
-          <div className="text-lg font-semibold">{formatBRL(product.price)}</div>
-          <div className="text-xs text-muted-foreground">ou 3x sem juros</div>
+        {item.productType && <div className="text-[11px] uppercase tracking-wider text-gold">{item.productType}</div>}
+        <Link to={`/produto/${item.handle}`} className="font-serif text-lg leading-tight">{item.title}</Link>
+        <div className="mt-auto flex items-center justify-between gap-2 pt-2">
+          <div className="text-lg font-semibold">{formatMoney(item.priceRange.minVariantPrice.amount, item.priceRange.minVariantPrice.currencyCode)}</div>
+          <button type="button" onClick={add} disabled={!variant || isLoading} aria-label={`Adicionar ${item.title} ao carrinho`} className="flex h-9 w-9 items-center justify-center rounded-full gradient-deep text-deep-foreground disabled:opacity-40"><ShoppingBag className="h-4 w-4" /></button>
         </div>
       </div>
-    </Link>
+    </article>
   );
 }
