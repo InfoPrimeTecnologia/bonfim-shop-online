@@ -1,6 +1,9 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Toaster } from "@/components/ui/sonner";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { useCartSync } from "@/hooks/useCartSync";
 
 import Index from "@/pages/Index";
@@ -15,11 +18,24 @@ import AdminDashboard from "@/pages/admin/Dashboard";
 import AdminProdutos from "@/pages/admin/Produtos";
 import AdminPedidos from "@/pages/admin/Pedidos";
 import NotFound from "@/pages/NotFound";
+import Entrar from "@/pages/Entrar";
+import MinhaConta from "@/pages/MinhaConta";
+import RedefinirSenha from "@/pages/RedefinirSenha";
 
 function Shell() {
   useCartSync();
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const isAdmin = location.pathname.startsWith("/admin");
+  useEffect(() => {
+    if (!user) return;
+    const next = localStorage.getItem("bonfim-auth-next");
+    if (next?.startsWith("/") && !next.startsWith("//")) {
+      localStorage.removeItem("bonfim-auth-next");
+      navigate(next, { replace: true });
+    }
+  }, [user, navigate]);
   return (
     <>
       {!isAdmin && <SiteHeader />}
@@ -28,10 +44,13 @@ function Shell() {
         <Route path="/loja" element={<Loja />} />
         <Route path="/produto/:id" element={<Produto />} />
         <Route path="/carrinho" element={<Carrinho />} />
-        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
         <Route path="/pedido-confirmado" element={<PedidoConfirmado />} />
         <Route path="/sobre" element={<Sobre />} />
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route path="/entrar" element={<Entrar />} />
+        <Route path="/redefinir-senha" element={<RedefinirSenha />} />
+        <Route path="/minha-conta" element={<ProtectedRoute><MinhaConta /></ProtectedRoute>} />
+        <Route path="/admin" element={<ProtectedRoute admin><AdminLayout /></ProtectedRoute>}>
           <Route index element={<AdminDashboard />} />
           <Route path="produtos" element={<AdminProdutos />} />
           <Route path="pedidos" element={<AdminPedidos />} />
@@ -46,8 +65,10 @@ function Shell() {
 export default function App() {
   return (
     <BrowserRouter>
-      <Shell />
-      <Toaster position="top-center" />
+      <AuthProvider>
+        <Shell />
+        <Toaster position="top-center" />
+      </AuthProvider>
     </BrowserRouter>
   );
 }

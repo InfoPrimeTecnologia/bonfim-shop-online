@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import { formatMoney } from "@/lib/shopify";
 import { useCartStore } from "@/store/shopifyCart";
-import { Trash2, Minus, Plus, ExternalLink, Loader2 } from "lucide-react";
+import { Trash2, Minus, Plus, ArrowRight, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Carrinho() {
   const { items, updateQuantity, removeItem, checkoutUrl, isLoading, isSyncing } = useCartStore();
   const total = items.reduce((sum, item) => sum + Number(item.variant.price.amount) * item.quantity, 0);
   const currency = items[0]?.variant.price.currencyCode ?? "BRL";
-  const checkout = () => { if (checkoutUrl) window.open(checkoutUrl, "_blank", "noopener,noreferrer"); };
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-10">
@@ -55,9 +55,9 @@ export default function Carrinho() {
             <div className="mt-2 flex justify-between text-sm"><span className="text-muted-foreground">Frete</span><span className="text-muted-foreground">Calculado no checkout</span></div>
             <div className="my-4 border-t border-border" />
             <div className="flex justify-between text-lg font-semibold"><span>Total</span><span>{formatMoney(total, currency)}</span></div>
-            <button type="button" onClick={checkout} disabled={!checkoutUrl || isLoading || isSyncing} className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full gradient-deep py-3 text-sm font-medium text-deep-foreground disabled:opacity-50">
-              {isLoading || isSyncing ? <Loader2 className="h-4 w-4 animate-spin" /> : <ExternalLink className="h-4 w-4" />} Finalizar compra
-            </button>
+            <Button asChild disabled={!checkoutUrl || isLoading || isSyncing} className="mt-6 w-full rounded-full">
+              <Link to="/checkout">{isLoading || isSyncing ? <Loader2 className="animate-spin" /> : <ArrowRight />} Finalizar compra</Link>
+            </Button>
           </aside>
         </div>
       )}

@@ -17,8 +17,8 @@ export default function Dashboard() {
       </div>
       <div className="rounded-xl border border-border bg-card p-6">
         <h2 className="font-serif text-xl">Gestão da loja</h2>
-        <p className="mt-2 text-sm text-muted-foreground">Produtos, estoque, pedidos, entrega e relatórios são administrados na Shopify. Reivindique a loja para acessar o painel completo.</p>
-        <span className="mt-5 inline-flex items-center gap-2 text-sm text-gold"><ExternalLink className="h-4 w-4" /> Painel disponível após reivindicar a loja</span>
+        <p className="mt-2 text-sm text-muted-foreground">Produtos, estoque, pagamentos e entregas são administrados na Shopify. O histórico iniciado no marketplace aparece na seção Pedidos.</p>
+        <a href="https://admin.shopify.com/store/bonfim-store-hub-7pr16-naejpsbm" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center gap-2 text-sm text-gold"><ExternalLink className="h-4 w-4" /> Abrir administração da Shopify</a>
       </div>
     </div>
   );
