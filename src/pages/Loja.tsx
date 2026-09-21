@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { useStore } from "@/store/store";
+import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 import { ProductCard } from "@/components/ProductCard";
-import { categories } from "@/data/products";
 
 export default function Loja() {
-  const { products } = useStore();
+  const { products, loading, error } = useShopifyProducts();
   const [cat, setCat] = useState<string>("Todos");
   const [q, setQ] = useState("");
+  const categories = Array.from(new Set(products.map((p) => p.node.productType).filter(Boolean)));
 
   const filtered = products.filter(
-    (p) => (cat === "Todos" || p.category === cat) && p.name.toLowerCase().includes(q.toLowerCase())
+    (p) => (cat === "Todos" || p.node.productType === cat) && p.node.title.toLowerCase().includes(q.toLowerCase())
   );
 
   return (
@@ -41,11 +41,15 @@ export default function Loja() {
         />
       </div>
 
-      {filtered.length === 0 ? (
+      {loading ? (
+        <p className="py-20 text-center text-muted-foreground">Carregando produtos...</p>
+      ) : error ? (
+        <p className="py-20 text-center text-destructive">{error}</p>
+      ) : filtered.length === 0 ? (
         <p className="py-20 text-center text-muted-foreground">Nenhum produto encontrado.</p>
       ) : (
         <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
-          {filtered.map((p) => <ProductCard key={p.id} product={p} />)}
+          {filtered.map((p) => <ProductCard key={p.node.id} product={p} />)}
         </div>
       )}
     </main>

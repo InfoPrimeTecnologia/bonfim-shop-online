@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import { useStore } from "@/store/store";
+import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 import { ProductCard } from "@/components/ProductCard";
 import hero from "@/assets/hero-products.jpg";
 import { ArrowRight, Truck, Store, ShieldCheck } from "lucide-react";
 
 export default function Index() {
-  const { products } = useStore();
-  const featured = products.filter((p) => p.featured);
+  const { products, loading, error } = useShopifyProducts();
+  const featured = products.slice(0, 4);
 
   return (
     <main>
@@ -43,7 +43,7 @@ export default function Index() {
           {[
             { icon: Truck, title: "Entrega para todo o Brasil", desc: "Receba em casa com rastreamento" },
             { icon: Store, title: "Retirada na Igreja", desc: "Sem custo de frete" },
-            { icon: ShieldCheck, title: "Pagamento seguro", desc: "Stripe e Asaas" },
+            { icon: ShieldCheck, title: "Pagamento seguro", desc: "Checkout protegido pela Shopify" },
           ].map((b, i) => (
             <div key={i} className="flex items-start gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full gradient-gold text-deep">
@@ -66,8 +66,11 @@ export default function Index() {
           </div>
           <Link to="/loja" className="text-sm text-foreground/80 hover:text-foreground">Ver tudo →</Link>
         </div>
+        {loading && <p className="py-12 text-center text-muted-foreground">Carregando produtos...</p>}
+        {error && <p className="py-12 text-center text-destructive">{error}</p>}
+        {!loading && !error && featured.length === 0 && <p className="py-12 text-center text-muted-foreground">Nenhum produto encontrado.</p>}
         <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
-          {featured.map((p) => <ProductCard key={p.id} product={p} />)}
+          {featured.map((p) => <ProductCard key={p.node.id} product={p} />)}
         </div>
       </section>
 

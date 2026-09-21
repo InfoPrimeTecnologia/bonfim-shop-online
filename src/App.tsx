@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { StoreProvider } from "@/store/store";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { Toaster } from "@/components/ui/sonner";
+import { useCartSync } from "@/hooks/useCartSync";
 
 import Index from "@/pages/Index";
 import Loja from "@/pages/Loja";
@@ -17,6 +17,7 @@ import AdminPedidos from "@/pages/admin/Pedidos";
 import NotFound from "@/pages/NotFound";
 
 function Shell() {
+  useCartSync();
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");
   return (
@@ -44,11 +45,9 @@ function Shell() {
 
 export default function App() {
   return (
-    <StoreProvider>
-      <BrowserRouter>
-        <Shell />
-      </BrowserRouter>
-      <Toaster />
-    </StoreProvider>
+    <BrowserRouter>
+      <Shell />
+      <Toaster position="top-center" />
+    </BrowserRouter>
   );
 }
