@@ -2,8 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { PasswordField } from "@/components/PasswordField";
 import { supabase } from "@/integrations/supabase/client";
 import { friendlyAuthError, passwordSchema } from "@/lib/password";
