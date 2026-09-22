@@ -7,6 +7,9 @@
 - [x] Criar área do cliente com histórico e status dos pedidos
 - [x] Restringir painel administrativo por função segura
 - [x] Validar catálogo, navegação, carrinho e proteções para visitantes
-- [ ] Validar compra autenticada e promover o primeiro administrador — aguardando a primeira conta confirmada
+- [ ] Validar compra autenticada — aguardando a primeira conta confirmada
+- [x] Preparar promoção segura de luan.contasmu@gmail.com e gestão de novos administradores
+- [x] Adicionar confirmação de senha e requisitos visíveis no cadastro
+- [ ] Ativar e-mails de confirmação com identidade Bonfim — aguardando configuração do domínio de envio
 - [ ] Sincronizar automaticamente pagamento e entrega — aguardando configuração dos eventos da Shopify
 - [ ] Definir 100 unidades no inventário de cada modelo — ajustar no inventário da Shopify

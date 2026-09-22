@@ -1,12 +1,22 @@
 import { useState } from "react";
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { Loader2, Mail } from "lucide-react";
+import { z } from "zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordField } from "@/components/PasswordField";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { friendlyAuthError, passwordSchema } from "@/lib/password";
+
+const signupSchema = z.object({
+  name: z.string().trim().min(3, "Informe seu nome completo.").max(100),
+  email: z.string().trim().email("Informe um e-mail válido.").max(255),
+  password: passwordSchema,
+  confirmation: z.string(),
+}).refine((data) => data.password === data.confirmation, { path: ["confirmation"], message: "As senhas não são iguais." });
 
 function safeNext(value: string | null) {
   return value?.startsWith("/") && !value.startsWith("//") ? value : "/minha-conta";
@@ -20,6 +30,7 @@ export default function Entrar() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmation, setConfirmation] = useState("");
   const [busy, setBusy] = useState(false);
   const next = safeNext(params.get("next"));
 
@@ -30,10 +41,12 @@ export default function Entrar() {
     setBusy(true);
     try {
       if (mode === "cadastro") {
+        const parsed = signupSchema.safeParse({ name, email, password, confirmation });
+        if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Revise os dados informados.");
         const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: { emailRedirectTo: window.location.origin, data: { full_name: name } },
+          email: parsed.data.email,
+          password: parsed.data.password,
+          options: { emailRedirectTo: window.location.origin, data: { full_name: parsed.data.name } },
         });
         if (error) throw error;
         if (!data.session) {
@@ -47,7 +60,7 @@ export default function Entrar() {
       }
       navigate(next, { replace: true });
     } catch (error) {
-      toast.error("Não foi possível continuar", { description: error instanceof Error ? error.message : "Revise os dados informados." });
+      toast.error("Não foi possível continuar", { description: friendlyAuthError(error) });
     } finally { setBusy(false); }
   };
 
@@ -66,13 +79,14 @@ export default function Entrar() {
         <form onSubmit={submit} className="mt-6 space-y-4">
           {mode === "cadastro" && <div><Label htmlFor="name">Nome completo</Label><Input id="name" value={name} onChange={(e) => setName(e.target.value)} required className="mt-1" /></div>}
           <div><Label htmlFor="email">E-mail</Label><Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="mt-1" /></div>
-          <div><Label htmlFor="password">Senha</Label><Input id="password" type="password" minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} required className="mt-1" /></div>
+          <PasswordField id="password" label="Senha" value={password} onChange={setPassword} autoComplete={mode === "cadastro" ? "new-password" : "current-password"} showRequirements={mode === "cadastro"} />
+          {mode === "cadastro" && <PasswordField id="password-confirmation" label="Confirmar senha" value={confirmation} onChange={setConfirmation} autoComplete="new-password" />}
           <Button type="submit" disabled={busy} className="w-full">{busy && <Loader2 className="animate-spin" />}{mode === "login" ? "Entrar" : "Criar conta"}</Button>
         </form>
-        {mode === "login" && <button type="button" onClick={forgot} className="mt-3 w-full text-center text-sm text-muted-foreground hover:text-foreground">Esqueci minha senha</button>}
-        <button type="button" onClick={() => setMode(mode === "login" ? "cadastro" : "login")} className="mt-5 w-full text-center text-sm text-gold">
+        {mode === "login" && <Button type="button" variant="ghost" onClick={forgot} className="mt-3 w-full text-muted-foreground">Esqueci minha senha</Button>}
+        <Button type="button" variant="link" onClick={() => { setMode(mode === "login" ? "cadastro" : "login"); setConfirmation(""); }} className="mt-2 w-full text-gold">
           {mode === "login" ? "Ainda não tenho conta" : "Já tenho uma conta"}
-        </button>
+        </Button>
       </div>
     </main>
   );
