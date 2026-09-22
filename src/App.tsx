@@ -17,6 +17,7 @@ import AdminLayout from "@/pages/admin/AdminLayout";
 import AdminDashboard from "@/pages/admin/Dashboard";
 import AdminProdutos from "@/pages/admin/Produtos";
 import AdminPedidos from "@/pages/admin/Pedidos";
+import Admins from "@/pages/admin/Admins";
 import NotFound from "@/pages/NotFound";
 import Entrar from "@/pages/Entrar";
 import MinhaConta from "@/pages/MinhaConta";
@@ -54,6 +55,7 @@ function Shell() {
           <Route index element={<AdminDashboard />} />
           <Route path="produtos" element={<AdminProdutos />} />
           <Route path="pedidos" element={<AdminPedidos />} />
+          <Route path="administradores" element={<Admins />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

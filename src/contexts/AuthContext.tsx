@@ -40,13 +40,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       full_name: typeof user.user_metadata?.full_name === "string" ? user.user_metadata.full_name : null,
       updated_at: new Date().toISOString(),
     });
-    void supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", user.id)
-      .eq("role", "admin")
-      .maybeSingle()
-      .then(({ data }) => setIsAdmin(data?.role === "admin"));
+    const syncAdmin = async () => {
+      if (user.email?.toLowerCase() === "luan.contasmu@gmail.com" && user.email_confirmed_at) {
+        await supabase.functions.invoke("manage-admins", { body: { action: "bootstrap" } });
+      }
+      const { data } = await supabase.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle();
+      setIsAdmin(data?.role === "admin");
+    };
+    void syncAdmin();
   }, [user]);
 
   const value = useMemo<AuthContextValue>(() => ({

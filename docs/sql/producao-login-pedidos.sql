@@ -36,3 +36,11 @@ ALTER POLICY "Admins update orders" ON public.orders USING(private.has_role(auth
 CREATE OR REPLACE FUNCTION public.has_role(_user_id uuid, _role public.app_role) RETURNS boolean LANGUAGE sql STABLE SECURITY INVOKER SET search_path=public AS $$ SELECT false $$;
 REVOKE ALL ON FUNCTION public.has_role(uuid, public.app_role) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.has_role(uuid, public.app_role) TO authenticated, service_role;
+
+-- Promoção idempotente do primeiro administrador, somente após confirmação do e-mail.
+INSERT INTO public.user_roles (user_id, role)
+SELECT id, 'admin'::public.app_role
+FROM auth.users
+WHERE lower(email) = 'luan.contasmu@gmail.com'
+  AND email_confirmed_at IS NOT NULL
+ON CONFLICT (user_id, role) DO NOTHING;

@@ -1,5 +1,5 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
-import { LayoutDashboard, Package, ShoppingCart, ArrowLeft } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingCart, ArrowLeft, Users } from "lucide-react";
 
 export default function AdminLayout() {
   return (
@@ -17,6 +17,7 @@ export default function AdminLayout() {
           <NavItem to="/admin" icon={<LayoutDashboard className="h-4 w-4" />} label="Dashboard" end />
           <NavItem to="/admin/produtos" icon={<Package className="h-4 w-4" />} label="Produtos" />
           <NavItem to="/admin/pedidos" icon={<ShoppingCart className="h-4 w-4" />} label="Pedidos" />
+          <NavItem to="/admin/administradores" icon={<Users className="h-4 w-4" />} label="Administradores" />
         </nav>
 
         <Link to="/" className="mt-auto inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground">
@@ -30,6 +31,7 @@ export default function AdminLayout() {
             <Link to="/admin" className="whitespace-nowrap">Dashboard</Link>
             <Link to="/admin/produtos" className="whitespace-nowrap">Produtos</Link>
             <Link to="/admin/pedidos" className="whitespace-nowrap">Pedidos</Link>
+            <Link to="/admin/administradores" className="whitespace-nowrap">Administradores</Link>
             <Link to="/" className="ml-auto whitespace-nowrap text-muted-foreground">← Loja</Link>
           </div>
         </div>
