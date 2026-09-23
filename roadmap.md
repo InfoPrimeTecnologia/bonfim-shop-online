@@ -13,3 +13,6 @@
 - [ ] Ativar e-mails de confirmação com identidade Bonfim — aguardando configuração do domínio de envio
 - [ ] Sincronizar automaticamente pagamento e entrega — aguardando configuração dos eventos da Shopify
 - [ ] Definir 100 unidades no inventário de cada modelo — ajustar no inventário da Shopify
+- [x] Cadastrar Regata e Babylook com imagens e tamanhos PP–XGG
+- [x] Ajustar Camisa Dry, Babylook e Regata para R$ 65 e Camisa UV para R$ 120
+- [ ] Configurar preço de R$ 60 exclusivo no Pix — depende de regra de pagamento compatível na Shopify
